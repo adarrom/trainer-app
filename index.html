@@ -35,6 +35,11 @@
         color: var(--parchment);
         font-family: "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", sans-serif;
         -webkit-tap-highlight-color: transparent;
+        /* The status bar is translucent and the viewport is full-bleed, so
+           without this the top of every view (back buttons, titles) slides
+           underneath the clock / notch area and gets clipped. Reserve the
+           system safe-area inset so content always starts below it. */
+        padding-top: env(safe-area-inset-top, 0px);
       }
       button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.25rem; }
       button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
