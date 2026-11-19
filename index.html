@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0a0a0d" />
-    <meta name="build-stamp" content="v20261116-wing-gambit-notes" />
+    <meta name="build-stamp" content="v20261118-chessreps-success" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -167,15 +167,17 @@
       .sq .dot { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 3; pointer-events: none; }
       .sq .dot i { width: 31%; height: 31%; border-radius: 50%; background: rgba(15,25,15,0.28); display: block; }
       .sq .ring { position: absolute; inset: 1px; border-radius: 50%; border: 4px solid rgba(15,25,15,0.28); z-index: 3; pointer-events: none; }
-      .wrong-badge {
-        position: absolute; top: 1px; right: 1px; width: 34%; height: 34%; min-width: 13px; min-height: 13px;
-        max-width: 20px; max-height: 20px; border-radius: 50%; background: var(--mistake);
-        border: 1.5px solid rgba(255,255,255,0.92); box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-        display: flex; align-items: center; justify-content: center; z-index: 4; pointer-events: none;
-        animation: badge-pop 0.16s ease-out;
-      }
-      @keyframes badge-pop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-      @media (prefers-reduced-motion: reduce) { .wrong-badge { animation: none; } }
+      .sq .check-badge { position: absolute; top: 2px; right: 2px; width: 34%; height: 34%; border-radius: 24%; background: #67b83a; box-shadow: 0 1px 4px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 6; pointer-events: none; }
+      .sq .check-badge svg { width: 72%; height: 72%; display: block; }
+      .arrow-layer { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; }
+      .wrong-panel { margin-top: 0.375rem; border-radius: 0.75rem; background: rgba(229,83,75,0.10); border: 1px solid rgba(229,83,75,0.38); padding: 0.625rem 0.875rem; text-align: center; }
+      .wrong-panel p { margin: 0; font-size: 0.9rem; line-height: 1.45; }
+      .wrong-panel .correct-move { font-weight: 700; color: #ff9d97; }
+      .try-again-btn { margin-top: 0.5rem; width: 100%; border-radius: 999px; background: var(--mistake); padding: 0.55rem 1.5rem; font-size: 1rem; font-weight: 700; color: #fff; }
+      .premove-panel { margin-top: 0.375rem; border-radius: 0.75rem; background: rgba(62,142,247,0.12); border: 1px solid rgba(62,142,247,0.45); padding: 0.5rem 0.875rem; display: flex; align-items: center; gap: 0.625rem; }
+      .premove-panel p { margin: 0; font-size: 0.9rem; line-height: 1.4; flex: 1; text-align: left; }
+      .premove-panel .premove-move { font-weight: 700; color: var(--accent-soft); }
+      .premove-cancel { flex-shrink: 0; border-radius: 999px; background: var(--panel-2); border: 1px solid var(--border); padding: 0.3rem 0.75rem; font-size: 0.8125rem; font-weight: 700; color: var(--parchment); min-height: 2rem; }
       .pieces-layer { position: absolute; inset: 0; pointer-events: none; }
       .piece-el { position: absolute; left: 0; top: 0; width: 12.5%; height: 12.5%; display: flex; align-items: center; justify-content: center; will-change: transform; transition: transform 270ms cubic-bezier(0.25, 0.8, 0.3, 1), opacity 180ms ease; }
       .piece-el.no-anim { transition: none; }
@@ -183,19 +185,20 @@
       @media (prefers-reduced-motion: reduce) { .piece-el { transition: none; } }
       .drag-ghost { position: absolute; transform: translate(-50%, -50%); width: 12.5%; aspect-ratio: 1 / 1; pointer-events: none; z-index: 5; }
 
-      .status-line { margin-top: 0.75rem; display: flex; min-height: 2.25rem; align-items: center; justify-content: center; text-align: center; }
+      .status-line { margin-top: 0.5rem; display: flex; min-height: 2rem; align-items: center; justify-content: center; text-align: center; }
       .status-line p { margin: 0; font-size: 1rem; }
       .status-line .your { font-weight: 600; }
       .status-line .faded { color: var(--faded); }
       .status-line .wrong { font-weight: 600; color: var(--mistake); }
 
-      .end-panel { margin-top: 0.25rem; border-radius: 1rem; background: var(--panel); border: 1px solid var(--border); padding: 1rem 1.25rem; text-align: center; }
-      .end-panel .row { display: flex; align-items: center; justify-content: center; gap: 0.625rem; }
-      .end-panel .icon { width: 2rem; height: 2rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 999px; }
-      .end-panel h3 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -0.015em; }
-      .next-btn { margin-top: 0.75rem; width: 100%; border-radius: 999px; background: var(--accent); padding: 0.75rem 1.5rem; font-size: 1rem; font-weight: 700; color: #fff; box-shadow: 0 10px 24px rgba(0,0,0,0.45); }
-      .again-btn { margin-top: 0.5rem; width: 100%; border-radius: 999px; background: var(--panel-2); padding: 0.625rem 1.5rem; font-size: 0.875rem; font-weight: 600; color: var(--parchment); }
-      .end-panel .caption { margin: 0.75rem auto 0; max-width: 20rem; font-size: 0.875rem; line-height: 1.55; color: var(--faded); }
+      .end-panel { margin-top: 0.375rem; border-radius: 1rem; background: var(--panel); border: 1px solid var(--border); padding: 0.75rem 1rem 0.875rem; text-align: center; }
+      .end-panel .row { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+      .end-panel .icon { width: 1.75rem; height: 1.75rem; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border-radius: 999px; }
+      .end-panel h3 { margin: 0; font-size: 1.125rem; font-weight: 700; letter-spacing: -0.015em; }
+      .next-btn { margin-top: 0.625rem; width: 100%; min-height: 3.5rem; border-radius: 0.875rem; background: var(--accent); padding: 1rem 1.5rem; font-size: 1.1875rem; font-weight: 800; letter-spacing: 0.01em; color: #fff; box-shadow: 0 10px 24px rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+      .next-btn .btn-icon { width: 1.375rem; height: 1.375rem; flex-shrink: 0; display: block; }
+      .again-btn { margin-top: 0.5rem; width: 100%; border-radius: 999px; background: var(--panel-2); padding: 0.5rem 1.5rem; font-size: 0.875rem; font-weight: 600; color: var(--parchment); }
+      .end-panel .caption { margin: 0.5rem auto 0; max-width: 20rem; font-size: 0.8125rem; line-height: 1.45; color: var(--faded); }
 
       .note-card { margin-top: 0.5rem; border-radius: 0.75rem; background: var(--panel); border: 1px solid var(--border); padding: 0.75rem 1rem; }
       .note-card p { margin: 0; font-size: 15px; line-height: 1.6; }
@@ -206,17 +209,17 @@
       .ctl-btn { border-radius: 999px; background: var(--panel); border: 1px solid var(--border); padding: 0.5rem 1rem; font-size: 0.875rem; font-weight: 600; color: var(--parchment); }
       .ctl-btn:disabled { opacity: 0.4; }
       .ctl-btn.giveup { color: var(--mistake); background: none; border: none; }
-      .nav-row { margin-top: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-      .nav-btn { width: 2.75rem; height: 2.5rem; min-height: 2.5rem; border-radius: 999px; background: var(--panel); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--parchment); }
+      .nav-row { margin-top: 0.25rem; display: flex; align-items: center; justify-content: center; gap: 0.375rem; line-height: 1; }
+      .nav-btn { width: 2.25rem; height: 1.75rem; min-height: 1.75rem; padding: 0; border-radius: 999px; background: var(--panel); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--parchment); }
       .nav-btn:disabled { opacity: 0.35; cursor: default; }
-      .nav-pos { min-width: 5.5rem; text-align: center; font-size: 0.875rem; font-weight: 600; color: var(--faded); }
+      .nav-pos { min-width: 4.75rem; text-align: center; font-size: 0.75rem; line-height: 1; font-weight: 600; color: var(--faded); }
       .nav-pos.browsing { color: var(--accent-soft); }
 
       /* ---------- Summary / loading ---------- */
       .summary { margin: 0 auto; width: 100%; max-width: 36rem; padding: 5rem 1rem 2.5rem; text-align: center; }
       .summary h2 { margin: 0; font-size: 2.25rem; font-weight: 700; letter-spacing: -0.015em; }
       .summary p { margin: 0.75rem auto 0; max-width: 24rem; font-size: 15px; line-height: 1.6; color: var(--faded); }
-      .summary .next-btn { width: auto; padding: 0.625rem 1.5rem; }
+      .summary .next-btn { width: auto; display: inline-flex; min-height: 2.75rem; padding: 0.625rem 1.5rem; font-size: 1rem; }
       .loading { padding: 4rem 1rem; text-align: center; color: var(--faded); }
       .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     </style>
@@ -231,7 +234,7 @@
          actually replaces the cached one. The sessionStorage flag is only a
          reload-loop guard for this visit, not saved user data. */
       (function () {
-        var STAMP = "v20261116-wing-gambit-notes";
+        var STAMP = "v20261118-chessreps-success";
         try { if (window.self !== window.top) return; } catch (e) { return; }
         function check() {
           if (!window.fetch) return;
@@ -657,18 +660,20 @@
 
       function createBoard(container, orientation) {
         container.innerHTML =
-          '<div class="board-frame"><div class="squares"></div><div class="pieces-layer"></div><div class="drag-ghost" style="display:none"></div></div>';
+          '<div class="board-frame"><div class="squares"></div><div class="pieces-layer"></div><svg class="arrow-layer" viewBox="0 0 800 800" aria-hidden="true"><g class="arrow-g"></g></svg><div class="drag-ghost" style="display:none"></div></div>';
         const frame = container.firstElementChild;
         const squaresEl = frame.children[0];
         const layerEl = frame.children[1];
-        const ghostEl = frame.children[2];
+        const arrowEl = frame.children[2];
+        const arrowG = arrowEl.querySelector(".arrow-g");
+        const ghostEl = frame.children[3];
         const squares = [];
         for (let row = 0; row < 8; row++) for (let col = 0; col < 8; col++) squares.push(squareAt(col, row, orientation));
         squaresEl.innerHTML = squares.map((sq) => '<div class="sq" data-sq="' + sq + '"></div>').join("");
         const sqEls = {};
         squaresEl.querySelectorAll(".sq").forEach((el) => { sqEls[el.dataset.sq] = el; });
 
-        let state = { fen: START_FEN, movable: null, lastMove: null, hintSquare: null, wrongSquare: null, onMove: null };
+        let state = { fen: START_FEN, movable: null, lastMove: null, hintSquare: null, arrow: null, premove: null, successSquare: null, onMove: null };
         let rendered = [];
         let selected = null;
         let drag = null; // {sq, x, y}
@@ -736,10 +741,12 @@
             const isLast = state.lastMove && (state.lastMove.from === sq || state.lastMove.to === sq);
             const isSel = selected === sq;
             const isHint = state.hintSquare === sq;
+            const isPremove = state.premove && (state.premove.from === sq || state.premove.to === sq);
             let bg, shadow = "";
             if (isSel || isHint) bg = "#eec25e";
             else bg = light ? "var(--sq-light)" : "var(--sq-dark)";
             if (isHint && !isSel) shadow = "inset 0 0 0 3px rgba(62,142,247,0.95), inset 0 0 0 100px rgba(250,204,21,0.22)";
+            else if (isPremove && !isSel) shadow = "inset 0 0 0 3px rgba(62,142,247,0.9), inset 0 0 0 100px rgba(62,142,247,0.42)";
             else if (isLast && !isSel) shadow = "inset 0 0 0 100px rgba(250,204,21,0.38)";
             el.style.background = bg;
             el.style.boxShadow = shadow;
@@ -751,8 +758,8 @@
               const isCapture = tp && state.movable && tp.color !== state.movable;
               inner += isCapture ? '<span class="ring"></span>' : '<span class="dot"><i></i></span>';
             }
-            if (state.wrongSquare === sq) {
-              inner += '<span class="wrong-badge"><svg width="58%" height="58%" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/></svg></span>';
+            if (state.successSquare === sq) {
+              inner += '<span class="check-badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4.5 12.5 L10 18 L19.5 6.5" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
             }
             inner += '<span class="sr-only">' + sq + "</span>";
             el.innerHTML = inner;
@@ -771,7 +778,30 @@
           }
           ghostEl.style.display = "none";
         }
-        function render() { renderSquares(); renderPieces(); renderGhost(); }
+        function arrowSVG(from, to, color) {
+          const fp = displayPos(from, currentOrientation);
+          const tp = displayPos(to, currentOrientation);
+          const x1 = (fp.col + 0.5) * 100, y1 = (fp.row + 0.5) * 100;
+          const x2 = (tp.col + 0.5) * 100, y2 = (tp.row + 0.5) * 100;
+          const dx = x2 - x1, dy = y2 - y1;
+          const len = Math.sqrt(dx * dx + dy * dy) || 1;
+          const ux = dx / len, uy = dy / len;
+          const px = -uy, py = ux;
+          const sx = x1 + ux * 16, sy = y1 + uy * 16;
+          const tipX = x2 - ux * 8, tipY = y2 - uy * 8;
+          const baseX = tipX - ux * 40, baseY = tipY - uy * 40;
+          const lX = baseX + px * 27, lY = baseY + py * 27;
+          const rX = baseX - px * 27, rY = baseY - py * 27;
+          return '<line x1="' + sx.toFixed(1) + '" y1="' + sy.toFixed(1) + '" x2="' + baseX.toFixed(1) + '" y2="' + baseY.toFixed(1) + '" stroke="' + color + '" stroke-width="24" stroke-linecap="round" opacity="0.93"/>' +
+            '<polygon points="' + tipX.toFixed(1) + "," + tipY.toFixed(1) + " " + lX.toFixed(1) + "," + lY.toFixed(1) + " " + rX.toFixed(1) + "," + rY.toFixed(1) + '" fill="' + color + '" opacity="0.93"/>';
+        }
+        function renderArrow() {
+          let html = "";
+          if (state.premove && state.premove.from && state.premove.to) html += arrowSVG(state.premove.from, state.premove.to, "#3e8ef7");
+          if (state.arrow && state.arrow.from && state.arrow.to) html += arrowSVG(state.arrow.from, state.arrow.to, "#e5534b");
+          arrowG.innerHTML = html;
+        }
+        function render() { renderSquares(); renderPieces(); renderArrow(); renderGhost(); }
 
         function setPosition(fen, opts) {
           opts = opts || {};
@@ -914,9 +944,10 @@
         let ply = 0, viewPly = 0, mistakes = 0, done = false, gaveUp = false, completed = false;
         const hintedPlies = new Set();
         let hintPly = null;
-        let wrongAttempt = null; // {from,to,previewFen}
-        let wrongNote = false;
-        let attemptTimer = null, autoTimer = null;
+        let wrongAttempt = null; // {from,to,previewFen,expectedSan,expectedFrom,expectedTo} — wrong move stays on the board until Try again
+        let premove = null; // {from,to} — queued while the opponent reply is playing; fired when it lands
+        let premoveTimer = null;
+        let autoTimer = null;
         let menuOpen = false;
         let alive = true;
 
@@ -932,10 +963,11 @@
             "</div>" +
             '<div id="s-mat-top"></div>' +
             '<div class="board-outer" id="s-board"></div>' +
+            '<div id="s-error"></div>' +
+            '<div id="s-end"></div>' +
             '<div id="s-mat-bottom"></div>' +
             '<div class="nav-row" id="s-nav" aria-label="Move navigation"></div>' +
             '<div class="status-line" aria-live="polite" id="s-status"></div>' +
-            '<div id="s-end"></div>' +
             '<div id="s-note"></div>' +
             '<p class="moves-line" id="s-moves"></p>' +
             '<div class="controls" id="s-controls"></div>' +
@@ -947,6 +979,7 @@
           matTop: root.querySelector("#s-mat-top"),
           matBottom: root.querySelector("#s-mat-bottom"),
           status: root.querySelector("#s-status"),
+          error: root.querySelector("#s-error"),
           end: root.querySelector("#s-end"),
           note: root.querySelector("#s-note"),
           moves: root.querySelector("#s-moves"),
@@ -962,6 +995,29 @@
         const fenView = () => fenAt(viewPly);
         const isBrowsing = () => viewPly < ply;
         const userTurn = () => !done && !finished() && turnAt(ply) === quiz.userColor;
+        // ChessReps-style line progress for the success button: N is this
+        // line's number within its course, M is how many lines of that
+        // course are in training (not archived or deleted) on this device.
+        // Finishing the first Scandinavian line in training therefore
+        // reads Next Line (1/13) when 13 of its lines are in training.
+        function courseLineProgress() {
+          if (quiz.kind !== "line") return null;
+          const vc = visibleCourses().find((c) => c.id === quiz.courseId);
+          if (vc) {
+            const idx = vc.lines.findIndex((l) => l.id === quiz.key);
+            if (idx >= 0) return { n: idx + 1, m: vc.lines.length };
+          }
+          const full = courseById(quiz.courseId);
+          if (!full) return null;
+          const fi = full.lines.findIndex((l) => l.id === quiz.key);
+          return fi >= 0 ? { n: fi + 1, m: full.lines.length } : null;
+        }
+        function lastUserMoveSquare() {
+          for (let i = quiz.moves.length - 1; i >= 0; i--) {
+            if (turnAt(i) === quiz.userColor) return quiz.moves[i].uci.slice(2, 4);
+          }
+          return null;
+        }
         function advancePly() {
           const wasAtLatest = viewPly === ply;
           ply += 1;
@@ -1000,52 +1056,125 @@
         }
         function afterPlyChange() {
           render();
-          if (finished() && !done && !gaveUp) { finish(mistakes, false); return; }
+          if (finished() && !done && !gaveUp) { premove = null; finish(mistakes, false); return; }
+          if (premove && userTurn() && !done && !wrongAttempt) {
+            // Opponent's reply just landed: let its glide finish, then
+            // fire the queued premove automatically.
+            if (premoveTimer) clearTimeout(premoveTimer);
+            premoveTimer = setTimeout(() => {
+              premoveTimer = null;
+              if (!alive) return;
+              executePremove();
+            }, 360);
+            return;
+          }
           scheduleAuto();
         }
-        function clearAttemptTimer() { if (attemptTimer) { clearTimeout(attemptTimer); attemptTimer = null; } }
-        function dismissWrongAttempt() { clearAttemptTimer(); wrongAttempt = null; render(); }
-
-        function handleMove(from, to) {
-          if (!userTurn() || wrongAttempt || isBrowsing()) return;
-          const expected = quiz.moves[ply]; if (!expected) return;
-          if (from + to === expected.uci.slice(0, 4)) {
-            hintPly = null; wrongNote = false;
+        function canPremove() {
+          return !done && !wrongAttempt && !isBrowsing() && !finished() &&
+            turnAt(ply) !== quiz.userColor && ply + 1 < quiz.moves.length &&
+            turnAt(ply + 1) === quiz.userColor;
+        }
+        function premoveLabel(pm) {
+          const future = parseFen(fenAt(ply + 1 <= quiz.moves.length && turnAt(ply) !== quiz.userColor ? ply + 1 : ply));
+          const current = parseFen(fenNow());
+          const fp = future.get(pm.from);
+          const piece = fp && fp.color === quiz.userColor ? fp : current.get(pm.from);
+          const letter = piece ? ({ n: "N", b: "B", r: "R", q: "Q", k: "K" })[piece.type] || "" : "";
+          return letter + pm.from + " → " + pm.to;
+        }
+        function setPremove(from, to) {
+          if (from === to) { render(); return; }
+          if (premove && premove.from === from && premove.to === to) { premove = null; render(); return; }
+          const piece = parseFen(fenNow()).get(from);
+          if (!piece || piece.color !== quiz.userColor) { render(); return; }
+          const dest = parseFen(fenNow()).get(to);
+          if (dest && dest.color === quiz.userColor) { render(); return; }
+          premove = { from, to };
+          render();
+        }
+        function cancelPremove() { premove = null; render(); }
+        function executePremove() {
+          if (!premove) return;
+          const pm = premove; premove = null;
+          if (!alive || done || wrongAttempt) { render(); return; }
+          // If the user stepped back while the opponent played, return
+          // to the latest position before firing the premove.
+          viewPly = ply;
+          if (!userTurn()) { render(); return; }
+          const expected = quiz.moves[ply]; if (!expected) { render(); return; }
+          if (pm.from + pm.to === expected.uci.slice(0, 4)) {
+            hintPly = null;
             advancePly();
             afterPlyChange();
           } else {
-            mistakes += 1; wrongNote = true;
-            wrongAttempt = { from, to, previewFen: previewMoveFen(fenNow(), from, to) };
+            const previewFen = previewMoveFen(fenNow(), pm.from, pm.to);
+            if (!previewFen) { render(); return; } // no longer legal: discard quietly
+            mistakes += 1;
+            wrongAttempt = { from: pm.from, to: pm.to, previewFen, expectedSan: expected.san, expectedFrom: expected.uci.slice(0, 2), expectedTo: expected.uci.slice(2, 4) };
             render();
-            clearAttemptTimer();
-            attemptTimer = setTimeout(() => { if (alive) dismissWrongAttempt(); }, 1150);
+          }
+        }
+        function tryAgain() {
+          // Take the wrong move back: clearing wrongAttempt restores the
+          // position before it, so the piece glides home and the arrow and
+          // explanation clear. The mistake already counted stays counted.
+          wrongAttempt = null;
+          render();
+        }
+
+        function handleMove(from, to) {
+          if (wrongAttempt || isBrowsing() || done) return;
+          if (canPremove()) { setPremove(from, to); return; }
+          if (!userTurn()) return;
+          if (premove) return; // a premove is about to fire; wait for it
+          const expected = quiz.moves[ply]; if (!expected) return;
+          if (from + to === expected.uci.slice(0, 4)) {
+            hintPly = null;
+            advancePly();
+            afterPlyChange();
+          } else {
+            const previewFen = previewMoveFen(fenNow(), from, to);
+            // Not legal in chess at all: no move is played, the piece
+            // simply stays in place, and there is no error state. The
+            // re-render only settles the board back at the current
+            // position (and consumes the drag bookkeeping).
+            if (!previewFen) { render(); return; }
+            // Legal but not the line move: the move stays on the board,
+            // the arrow shows the line move, and play waits for Try again.
+            mistakes += 1;
+            wrongAttempt = { from, to, previewFen, expectedSan: expected.san, expectedFrom: expected.uci.slice(0, 2), expectedTo: expected.uci.slice(2, 4) };
+            render();
           }
         }
         function useHint() {
-          if (!userTurn() || isBrowsing()) return;
+          if (!userTurn() || isBrowsing() || wrongAttempt || premove) return;
           hintedPlies.add(ply);
           hintPly = ply;
           render();
         }
         function showMove() {
-          if (!userTurn() || isBrowsing()) return;
+          if (!userTurn() || isBrowsing() || wrongAttempt || premove) return;
           hintedPlies.add(ply);
           hintPly = null;
-          clearAttemptTimer(); wrongAttempt = null; wrongNote = false;
+          wrongAttempt = null;
           setTimeout(() => { if (!alive) return; advancePly(); afterPlyChange(); }, 350);
           render();
         }
         function restart() {
           scrollToTop();
           completed = false;
-          clearAttemptTimer(); if (autoTimer) clearTimeout(autoTimer);
-          wrongAttempt = null; wrongNote = false;
+          if (autoTimer) clearTimeout(autoTimer);
+          if (premoveTimer) clearTimeout(premoveTimer); premoveTimer = null;
+          premove = null;
+          wrongAttempt = null;
           ply = 0; viewPly = 0; mistakes = 0; hintedPlies.clear(); hintPly = null; done = false; gaveUp = false;
           render();
           scheduleAuto();
         }
         function giveUp() {
-          hintPly = null; clearAttemptTimer(); wrongAttempt = null; wrongNote = false;
+          hintPly = null; wrongAttempt = null; premove = null;
+          if (premoveTimer) clearTimeout(premoveTimer); premoveTimer = null;
           finish(mistakes, true);
           scheduleAuto();
         }
@@ -1079,11 +1208,13 @@
 
           board.setPosition(displayFen, { orientation: quiz.userColor, lastMove: displayLastMove });
           board.update({
-            movable: userTurn() && !wrongAttempt && !browsing ? quiz.userColor : null,
+            movable: !wrongAttempt && !browsing && !done && ((userTurn() && !premove) || canPremove()) ? quiz.userColor : null,
             onMove: handleMove,
             lastMove: displayLastMove,
             hintSquare,
-            wrongSquare: wrongAttempt && !browsing ? wrongAttempt.to : null
+            premove: premove && !browsing && !wrongAttempt ? { from: premove.from, to: premove.to } : null,
+            arrow: wrongAttempt && !browsing ? { from: wrongAttempt.expectedFrom, to: wrongAttempt.expectedTo } : null,
+            successSquare: done && !gaveUp && !browsing ? lastUserMoveSquare() : null
           });
 
           // move navigation: back / forward through moves played so far.
@@ -1093,9 +1224,9 @@
             const fwdDisabled = viewPly >= ply;
             const posLabel = ply === 0 ? "Start" : browsing ? "Viewing " + viewPly + " of " + ply : viewPly + " of " + ply + " · Latest";
             els.nav.innerHTML =
-              '<button type="button" class="nav-btn" id="s-back" aria-label="Go back one move"' + (backDisabled ? " disabled" : "") + '><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 L8 12 L15 19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+              '<button type="button" class="nav-btn" id="s-back" aria-label="Go back one move"' + (backDisabled ? " disabled" : "") + '><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5 L8 12 L15 19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
               '<span class="nav-pos' + (browsing ? " browsing" : "") + '" aria-live="polite">' + esc(posLabel) + "</span>" +
-              '<button type="button" class="nav-btn" id="s-fwd" aria-label="Go forward one move"' + (fwdDisabled ? " disabled" : "") + '><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5 L16 12 L9 19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
+              '<button type="button" class="nav-btn" id="s-fwd" aria-label="Go forward one move"' + (fwdDisabled ? " disabled" : "") + '><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5 L16 12 L9 19" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>';
             const backBtn = els.nav.querySelector("#s-back");
             const fwdBtn = els.nav.querySelector("#s-fwd");
             if (backBtn) backBtn.addEventListener("click", stepBack);
@@ -1105,19 +1236,52 @@
           // status
           if (!done) {
             if (browsing) els.status.innerHTML = '<p class="faded">Viewing an earlier position. Step forward to return to your latest move.</p>';
-            else if (wrongNote && userTurn()) els.status.innerHTML = '<p class="wrong fade-in">Not that move. Try again.</p>';
+            else if (wrongAttempt) els.status.innerHTML = "";
+            else if (premove) els.status.innerHTML = '<p class="faded">Premove queued. It will play when the opponent\u2019s move finishes.</p>';
             else if (userTurn()) els.status.innerHTML = '<p class="your">Your move' + (quiz.kind === "puzzle" ? ". Find the tactic." : ".") + "</p>";
-            else els.status.innerHTML = '<p class="faded">' + (ply === 0 ? "The line begins…" : "Opponent replies…") + "</p>";
+            else els.status.innerHTML = '<p class="faded">' + (ply === 0 ? "The line begins… You can premove." : "Opponent replies… You can premove.") + "</p>";
           } else if (browsing) {
             els.status.innerHTML = '<p class="faded">Viewing an earlier position. Step forward to return to the final position.</p>';
           } else {
             els.status.innerHTML = "";
           }
 
+          // wrong-move panel (ChessReps style): the wrong move stays on the
+          // board, this explains it is not the line move, names the correct
+          // move (also shown by the board arrow), and Try again takes it back.
+          if (wrongAttempt && !browsing && !done) {
+            els.error.innerHTML =
+              '<div class="wrong-panel fade-in">' +
+                '<p>That is not the line move. The line plays <span class="correct-move">' + esc(wrongAttempt.expectedSan) + '</span> here.</p>' +
+                '<button type="button" class="try-again-btn" id="s-tryagain">Try again</button>' +
+              "</div>";
+            els.error.querySelector("#s-tryagain").addEventListener("click", tryAgain);
+          } else if (premove && !browsing && !done) {
+            els.error.innerHTML =
+              '<div class="premove-panel fade-in">' +
+                '<p>Premove queued: <span class="premove-move">' + esc(premoveLabel(premove)) + '</span></p>' +
+                '<button type="button" class="premove-cancel" id="s-cancel-premove">Cancel</button>' +
+              "</div>";
+            els.error.querySelector("#s-cancel-premove").addEventListener("click", cancelPremove);
+          } else {
+            els.error.innerHTML = "";
+          }
+
           // end panel: title row, Next button FIRST (above the fold), then detail
           if (done) {
             const clean = mistakes === 0 && hintedPlies.size === 0;
-            const finishLabel = typeof opts.finishLabel === "function" ? opts.finishLabel() : opts.finishLabel;
+            let finishLabel = typeof opts.finishLabel === "function" ? opts.finishLabel() : opts.finishLabel;
+            // ChessReps-style success button for lines: a large Next Line
+            // button carrying the course progress, Next Line (N/M). On the
+            // last line in training in the course it reads Finish (N/M);
+            // an ended drill run keeps its End run label.
+            const prog = !gaveUp ? courseLineProgress() : null;
+            let nextIcon = "";
+            if (prog && finishLabel !== "End run") {
+              if (finishLabel === "Finish" && prog.n >= prog.m) finishLabel = "Finish (" + prog.n + "/" + prog.m + ")";
+              else finishLabel = "Next Line (" + prog.n + "/" + prog.m + ")";
+              nextIcon = '<svg class="btn-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5C6 4 9 3.6 12 5c3-1.4 6-1 8-.5v13c-2-.5-5-.9-8 .5-3-1.4-6-1-8-.5v-12z" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 5v13" stroke="#fff" stroke-width="1.8"/></svg>';
+            }
             const iconBg = gaveUp ? "var(--panel-2)" : clean ? "var(--good)" : "var(--accent)";
             const icon = gaveUp
               ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5C6 4 9 3.6 12 5c3-1.4 6-1 8-.5v13c-2-.5-5-.9-8 .5-3-1.4-6-1-8-.5v-12z" stroke="#f4f4f6" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 5v13" stroke="#f4f4f6" stroke-width="1.8"/></svg>'
@@ -1131,7 +1295,7 @@
             els.end.innerHTML =
               '<div class="end-panel fade-in">' +
                 '<div class="row"><span class="icon" style="background:' + iconBg + '">' + icon + "</span><h3>" + title + "</h3></div>" +
-                '<button type="button" class="next-btn" id="s-next">' + esc(finishLabel) + "</button>" +
+                '<button type="button" class="next-btn" id="s-next">' + nextIcon + esc(finishLabel) + "</button>" +
                 (mode !== "drill" && mode !== "time" ? '<button type="button" class="again-btn" id="s-again">Play it again</button>' : "") +
                 '<p class="caption">' + esc(caption) + "</p>" +
               "</div>";
@@ -1170,7 +1334,7 @@
 
           // controls
           if (!done) {
-            const canPlay = userTurn() && !browsing;
+            const canPlay = userTurn() && !browsing && !wrongAttempt && !premove;
             let c = '<button type="button" class="ctl-btn" id="s-hint"' + (canPlay ? "" : " disabled") + ">Hint</button>";
             if (mode === "learn") c += '<button type="button" class="ctl-btn" id="s-show"' + (canPlay ? "" : " disabled") + ">Show move</button>";
             if (mode !== "drill" && mode !== "time") c += '<button type="button" class="ctl-btn" id="s-restart">Restart</button>';
@@ -1204,8 +1368,8 @@
 
         function cleanup() {
           alive = false;
-          clearAttemptTimer();
           if (autoTimer) clearTimeout(autoTimer);
+          if (premoveTimer) clearTimeout(premoveTimer);
           if (sessionCleanup === cleanup) sessionCleanup = null;
         }
         sessionCleanup = cleanup;
@@ -1703,7 +1867,7 @@
           renderHome();
         })
         .catch(() => {
-          app.innerHTML = '<div class="loading"><p style="color:var(--parchment)">Your courses could not be loaded.</p><button type="button" class="next-btn" style="width:auto;padding:0.625rem 1.5rem" onclick="location.reload()">Try again</button></div>';
+          app.innerHTML = '<div class="loading"><p style="color:var(--parchment)">Your courses could not be loaded.</p><button type="button" class="next-btn" style="width:auto;display:inline-flex;min-height:2.75rem;padding:0.625rem 1.5rem;font-size:1rem" onclick="location.reload()">Try again</button></div>';
         });
     </script>
   </body>
