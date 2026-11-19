@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0a0a0d" />
-    <meta name="build-stamp" content="v20261118-chessreps-success" />
+    <meta name="build-stamp" content="v20261118-no-double-tap-zoom" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -30,7 +30,20 @@
         --border: rgba(255, 255, 255, 0.07);
       }
       * { box-sizing: border-box; }
-      html, body { margin: 0; padding: 0; }
+      /* Disable double-tap zoom without disabling pinch zoom or scrolling:
+         touch-action: manipulation permits panning and pinch-zoom but
+         removes the double-tap-to-zoom gesture (and the tap delay that
+         came with it). The viewport meta above intentionally sets no
+         scale cap and does not turn off user scaling, either of which
+         would kill pinch zoom; double-tap is handled here instead.
+         Applied on the page (html/body), on interactive elements, and on
+         the board wrapper below. The board frame itself keeps the even
+         stricter touch-action: none (see .board-frame), which also
+         disables double-tap zoom there and is required so dragging a
+         piece is delivered as pointer events instead of scrolling. */
+      html, body { margin: 0; padding: 0; touch-action: manipulation; }
+      button, [role="button"], a, select, summary, label, input { touch-action: manipulation; }
+      .board-outer { touch-action: manipulation; }
       body {
         background: var(--room);
         color: var(--parchment);
@@ -234,7 +247,7 @@
          actually replaces the cached one. The sessionStorage flag is only a
          reload-loop guard for this visit, not saved user data. */
       (function () {
-        var STAMP = "v20261118-chessreps-success";
+        var STAMP = "v20261118-no-double-tap-zoom";
         try { if (window.self !== window.top) return; } catch (e) { return; }
         function check() {
           if (!window.fetch) return;
